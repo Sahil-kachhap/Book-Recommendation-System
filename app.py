@@ -2,6 +2,8 @@ import numpy as np
 import pickle
 import streamlit as st
 
+st.set_page_config(page_title='Book Recommendation', page_icon=':books:', layout='centered', initial_sidebar_state='auto')
+
 st.header('Book Recommendation System')
 model = pickle.load(open('artifacts/model.pkl', 'rb'))
 books = pickle.load(open('artifacts/book_names.pkl', 'rb'))
