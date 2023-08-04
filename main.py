@@ -2,6 +2,7 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
+from scipy.sparse import csr_matrix
 
 books = pd.read_csv('data/BX-Books.csv', sep=';', encoding="latin-1", on_bad_lines='skip')
 # print(books.shape)
@@ -35,4 +36,10 @@ num_rating.rename(columns={"rating": "rating_count"}, inplace=True)
 final_rating = rated_books.merge(num_rating, on='title')
 final_rating = final_rating[final_rating['rating_count'] >= 50]
 final_rating.drop_duplicates(['user_id', 'title'], inplace=True)
-print(final_rating.shape) # (61853, 8)
+#print(final_rating.shape) # (61853, 8)
+
+# pivot table implementation
+book_pivot = final_rating.pivot_table(columns='user_id', index='title', values='rating')
+book_pivot.fillna(0, inplace=True)
+print(book_pivot.shape) 
+book_sparse = csr_matrix(book_pivot)
